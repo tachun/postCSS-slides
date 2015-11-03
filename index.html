@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>PostCSS</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>PostCSS</h1>
+          <div style="background:#fff;width: 300px; text-align: center; margin: 0 auto;">
+            <img src="images/postcss-logo.svg" style="width: 400px" alt="">
+          </div>
+          <p>by Tachun LIN  |  @tachunL</p>
+				</section>
+
+
+        <section>
+					<h1>CSS is not smart</h1>
+          <img src="images/old.gif" style="width: 400px" alt="">
+				</section>
+
+
+				<section>
+					<h3>can’t use vars</h3>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+$brandColor: red;
+
+body {
+  color: $brandColor;
+}
+          </code></pre>
+
+          <h3 class="fragment">can’t nested classes</h3>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+.foo {
+  .bar {
+    background-color: red;
+  }
+}
+          </code></pre>
+
+          <h3 class="fragment">no mixins</h3>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+@mixin vertical-gradient( $top, $bottom ) {
+  background: linear-gradient( top, $top 0%, $bottom 100% );
+}
+          </code></pre>
+				</section>
+
+
+        <section>
+          <h1>Today's Solution is...</h1>
+        </section>
+
+
+        <section>
+					<h1>Css preprocessor</h1>
+          <h3 class="fragment">
+            Sass (.scss or .sass)
+					</h3>
+          <h3 class="fragment">
+            Less (.less)
+          </h3>
+          <h3 class="fragment">
+            Stylus (.styl)
+          </h3>
+				</section>
+
+
+        <section>
+					<h1>BUT !!</h1>
+          <h2 class="fragment">front-end is a hipsters' job !!</h2>
+          <img class="fragment" style="width:300px" src="images/hipster.gif">
+				</section>
+
+
+        <section>
+          <h2>we need a brand new front-end framework every 6 months</h2>
+          <img style="width:800px" src="images/frameworks.png">
+          <h1 class="fragment">and !!</h1>
+				</section>
+
+
+        <section>
+					<h1>a new way to write css</h1>
+          <img style="width:500px" src="images/neway.gif">
+				</section>
+
+
+        <section>
+					<h1>What is PostCSS?</h1>
+				</section>
+
+
+        <section>
+					<h2><em>PostCSS is a tool for...</em></h2>
+          <h1 class="fragment">transforming CSS with JS plugins</h1>
+				</section>
+
+
+        <section>
+          <h2><em>PostCSS work with build tools...</em></h2>
+          <h3 class="fragment">Grunt, Gulp, webpack, Broccoli, Brunch, ENB, Fly, Stylus, Duo and Connect/Express.</h3>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+npm install --save gulp-postcss
+          </code></pre>
+        </section>
+
+
+        <section>
+					<h2><em>PostCSS has Only...</em></h2>
+          <h3 class="fragment">a CSS parser</h3>
+          <h3 class="fragment">a node tree stringifier</h3>
+          <h3 class="fragment">a CSS node tree API</h3>
+          <h3 class="fragment">a source map generator</h3>
+				</section>
+
+
+        <section>
+          <h2><em>PostCss Plugins...</em></h2>
+          <h3 class="fragment">receives a CSS node tree</h3>
+          <h3 class="fragment">transforms it</h3>
+          <h3 class="fragment">returns the modified tree</h3>
+          <h1 class="fragment">example???</h1>
+				</section>
+
+
+        <section>
+          <h2>rem</h2>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+// With preprocessor:
+
+@mixin font-size($sizeValue: 16) {
+  font-size: $sizeValue + px; // IE fallback
+  font-size: ($sizeValue / 16) + rem;
+}
+
+.convert {
+  @include font-size(24); // return font-size: 1.5rem;
+}
+          </code></pre>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+// Always someone will do this:
+
+.con {
+  font-size: 24px;  // should use @include font-size(24);
+}
+          </code></pre>
+
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+// With PostCSS & pxtorem plugin
+
+.convert {
+  font-size: 16px; // converted to 1rem
+}
+          </code></pre>
+				</section>
+
+
+        <section>
+          <h2>How it works?</h2>
+          <a href="https://github.com/cuth/postcss-pxtorem/blob/master/index.js#L18" target="_blank">https://github.com/cuth/postcss-pxtorem</a>
+				</section>
+
+
+        <section>
+          <h2>at2x</h2>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+.logo {
+  background: url('/images/logo.png') no-repeat 0 0 at-2x;
+}
+          </code></pre>
+          <p class="fragment">Output in css:</p>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+.logo {
+  background: url('/public/images/logo.png') no-repeat 0 0;
+}
+
+@media (min--moz-device-pixel-ratio: 1.5),
+       (-o-min-device-pixel-ratio: 3/2),
+       (-webkit-min-device-pixel-ratio: 1.5),
+       (min-device-pixel-ratio: 1.5),
+       (min-resolution: 144dpi),
+       (min-resolution: 1.5dppx)
+{
+  .logo {
+    background: url('/public/images/logo@2x.png') no-repeat 0 0;
+  }
+}
+          </code></pre>
+        </section>
+
+
+        <section>
+          <h2>How it works?</h2>
+          <a href="https://github.com/simonsmith/postcss-at2x/blob/master/lib/index.js#L78" target="_blank">https://github.com/simonsmith/postcss-at2x</a>
+				</section>
+
+
+        <section>
+          <h2>It's cool but...</h2>
+          <h1 class="fragment">not enough?</h1>
+				</section>
+
+
+        <section>
+          <h1>postcss's cool part</h1>
+          <img style="width:400px" src="images/cool.gif">
+				</section>
+
+
+        <section>
+          <h2>Modularity</h2>
+          <h3 class="fragment">
+            postcss-import, postcss-simple-vars, postcss-mixins, postcss-nested, autoprefixer, cssnano
+            <br/>
+            or
+            <br/>
+            <a href="https://jonathantneal.github.io/precss/" target="_blank">precss</a>
+          </h3>
+				</section>
+
+
+        <section>
+          <h4>cssnano is awesome !!</h4>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+h1::before, h1:before {
+    margin: 10px 20px 10px 20px;
+    color: #ff0000;
+    -webkit-border-radius: 16px;
+    border-radius: 16px;
+    font-weight: normal;
+    font-weight: normal;
+}
+
+h1:before{margin:10px 20px;color:red;border-radius:16px;font-weight:400}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Lightweight</h2>
+          <h3 class="fragment">We won’t use every feature in css preprocessor</h3>
+        </section>
+
+
+        <section>
+          <h2>Faster</h2>
+          <h3 class="fragment">3-30 times faster than preprocessor</h3>
+          <p class="fragment">10,000 selectors, each with 5 properties using the function. This makes 50,000 things to process</p>
+          <div class="fragment">
+            <p>Sass: 13s</p>
+            <img src="images/libsass.png" alt="">
+            <br/>
+            <p>PostCss: 372ms</p>
+            <img src="images/postcss.png" alt="">
+          </div>
+        </section>
+
+
+        <section>
+          <h2>easy to create plugin</h2>
+          <h3 class="fragment">It's javascript!</h3>
+          <a class="fragment" href="https://github.com/postcss/postcss/blob/master/docs/api.md" target="_blank">API document</a>
+          <br/>
+          <a class="fragment" href="https://github.com/postcss/postcss-plugin-boilerplate" target="_blank">postcss-plugin-boilerplate</a>
+        </section>
+
+
+        <section>
+          <h1>How to use?</h1>
+        </section>
+
+
+        <section>
+          <p>gulpfile.js</p>
+          <pre><code class="hljs" data-trim contenteditable>
+var processors = [
+  require('postcss-import')({
+    from: 'src/css/main.css'
+  }),
+  require('postcss-simple-vars'),
+  require('postcss-mixins'),
+  require('postcss-nested'),
+  require('autoprefixer')({
+    browsers: ['last 2 versions', '> 2%']
+  }),
+  require('cssnano')
+];
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs" data-trim contenteditable>
+gulp.task('postcss', function() {
+  return gulp.src('src/css/**/*.css')
+    .pipe(postCSS(processors))
+    .pipe(gulp.dest('build/css'))
+});
+          </code></pre>
+        </section>
+
+
+        <section>
+          <h1>Where to find plugins?</h1>
+        </section>
+
+
+        <section>
+          <h3><a href="https://github.com/postcss/postcss" target="_blank">PostCss github</a></h3>
+          <h3><a href="http://postcss.parts/" target="_blank">postcss.parts</a></h3>
+        </section>
+
+
+        <section>
+          <h1>A little bit too far...</h1>
+        </section>
+
+
+        <section>
+          <h2>CSS next</h2>
+          <a href="http://cssnext.io/playground/" target="_blank">playground</a>
+        </section>
+
+
+        <section>
+          <h1>Conclusion</h1>
+        </section>
+
+
+        <section>
+          <h3>Start with a small project</h3>
+          <h3 class="fragment">Or mix with sass, less or stylus</h3>
+        </section>
+
+
+        <section>
+          <p>postcss-font-magician</p>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+body {
+   font-family: "Alice";
+}
+          </code></pre>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+@font-face {
+   font-family: "Alice";
+   font-style: normal;
+   font-weight: 400;
+   src: local("Alice"), local("Alice-Regular"),
+        url("http://fonts.gstatic.com/s/alice/v7/sZyKh5NKrCk1xkCk_F1S8A.eot?#") format("eot"),
+        url("http://fonts.gstatic.com/s/alice/v7/l5RFQT5MQiajQkFxjDLySg.woff2") format("woff2"),
+        url("http://fonts.gstatic.com/s/alice/v7/_H4kMcdhHr0B8RDaQcqpTA.woff")  format("woff"),
+        url("http://fonts.gstatic.com/s/alice/v7/acf9XsUhgp1k2j79ATk2cw.ttf")   format("truetype")
+}
+
+body {
+  font-family: "Alice";
+}
+          </code></pre>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+require('postcss-font-magician')({
+   hosted: '../fonts'
+});
+          </code></pre>
+        </section>
+
+
+        <section>
+          <p>postcss-simple-vars</p>
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+// colors.js
+
+module.exports = {
+  blue: '#056ef0'
+}
+          </code></pre>
+
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+// gulpfile.js
+
+var colors = require('./config/colors');
+var vars   = require('postcss-simple-vars')
+
+gulp.task('css', function () {
+  return gulp.src('./src/*.css')
+    .pipe(postcss([ vars({ variables: colors }) ]))
+    .pipe(gulp.dest('./dest'));
+});
+          </code></pre>
+
+          <pre class="fragment"><code class="hljs" data-trim contenteditable>
+// css
+
+body{
+  background-color: $colors.blue;
+}
+          </code></pre>
+        </section>
+
+
+        <section>
+          <h1>Thanks</h1>
+          <img src="images/thanks.gif" alt="">
+        </section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
